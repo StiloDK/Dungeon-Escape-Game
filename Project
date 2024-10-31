@@ -2,6 +2,9 @@ namespace Escape_The_Dungeon
 {
     internal class Program
     {
+        /// <summary>
+        /// Set up the Array for the map
+        /// </summary>
         static string[,] dungeon =
         {
             { "Wall", "Wall", "Wall", "Wall", "Wall" },
@@ -88,6 +91,9 @@ namespace Escape_The_Dungeon
                 Console.WriteLine("\nThere is a wall blocking your path.");
             }
         }
+        /// <summary>
+        /// For the player to find the key if they search on the NorthCellar
+        /// </summary>
         static void search()
         {
             if (dungeon[playerRow, playerCol] == "NorthCellar" && !hasKey)
@@ -105,6 +111,10 @@ namespace Escape_The_Dungeon
                 Console.WriteLine("\nYou search the room but find nothing.");
             }
         }
+
+    /// <summary>
+    /// If player is on the Door with the key they can interact and get here which leads to win
+    /// </summary>
         static void win()
         {
             if (dungeon[playerRow, playerCol] == "Door" && hasKey)
