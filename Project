@@ -1,0 +1,121 @@
+namespace Escape_The_Dungeon
+{
+    internal class Program
+    {
+        static string[,] dungeon =
+        {
+            { "Wall", "Wall", "Wall", "Wall", "Wall" },
+            { "Wall", "StartCellar", "Wall", "NorthCellar", "Wall" },
+            { "Wall", "Hallway", "Hallway", "Hallway", "Wall" },
+            { "Wall", "SouthCellar", "Wall", "Door", "Wall" },
+            { "Wall", "Wall", "Wall", "Wall", "Wall" },
+        };
+
+        static int playerRow = 1;
+        static int playerCol = 1;
+        static bool hasKey = false;
+
+        /// <summary>
+        /// Method reads user input and tells where to move in 2D array
+        /// </summary>
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello there, adventurer, and welcome to the Dungeon!");
+            Console.WriteLine("You find yourself in an empty room with nothing but a hallway in front of you.\n");
+
+            while (true)
+            {
+                DisplayRoom();
+                Console.WriteLine("What is your move?\nGo North\nGo South\nGo East\nGo West\nSearch Room\nInteract");
+                string? choice = Console.ReadLine().ToLower();
+                switch (choice)
+                {
+                    case "north":
+                    case "go north":
+                        Move(-1, 0);
+                        break;
+                    case "south":
+                    case "go south":
+                        Move(1, 0);
+                        break;
+                    case "east":
+                    case "go east":
+                        Move(0, 1);
+                        break;
+                    case "west":
+                    case "go west":
+                        Move(0, -1);
+                        break;
+                    case "search":
+                    case "search room":
+                        Console.WriteLine("\nYou search the room but find nothing.");
+                        search();
+                        break;
+                    case "interact":
+                        win();
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid option try again");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        break;
+                }
+            }
+        }
+        /// <summary>
+        /// Display where user is at on the 2D array
+        /// </summary>
+        static void DisplayRoom()
+        {
+            Console.WriteLine($"You are in {dungeon[playerRow, playerCol]}.");
+        }
+        /// <summary>
+        /// Gets the infomation on where to move, checks if its valid and if valid moves to the disired tile
+        /// </summary>
+        static void Move(int rowChange, int colChange)
+        {
+            int newRow = playerRow + rowChange;
+            int newCol = playerCol + colChange;
+
+            if (dungeon[newRow, newCol] != "Wall")
+            {
+                playerRow = newRow;
+                playerCol = newCol;
+                Console.WriteLine($"\nYou move to {dungeon[playerRow, playerCol]}.");
+            }
+            else
+            {
+                Console.WriteLine("\nThere is a wall blocking your path.");
+            }
+        }
+        static void search()
+        {
+            if (dungeon[playerRow, playerCol] == "NorthCellar" && !hasKey)
+            {
+                hasKey = true;
+                Console.WriteLine("\nYou found a key in the NorthCellar!");
+            }
+            else if (dungeon[playerRow, playerCol] == "SouthCellar")
+            {
+                Console.WriteLine("\nYou died by a trap!.");
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("\nYou search the room but find nothing.");
+            }
+        }
+        static void win()
+        {
+            if (dungeon[playerRow, playerCol] == "Door" && hasKey)
+            {
+                Console.WriteLine("\nYou escaped!!! CONGRATULATIONS!!!");
+                Environment.Exit(0);
+            } 
+            else
+            {
+                Console.WriteLine("\nThere is nothing to interact with here.");
+            }
+        }
+    }
+}
